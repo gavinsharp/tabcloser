@@ -1,0 +1,4 @@
+content	tabcloser	content/
+locale	tabcloser	en-US	locale/en-US/
+skin	tabcloser	classic/1.0	skin/
+overlay	chrome://browser/content/browser.xul	chrome://tabcloser/content/firefoxOverlay.xul

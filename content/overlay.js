@@ -73,16 +73,7 @@ var tabcloser = {
   onMenuItemCommand: function(e) {
     var host = gBrowser.mContextTab.linkedBrowser.currentURI.host;
 
-    // prompt?
-    var message = this.strings.getFormattedString("areYouSure.message",
-                                                [host]);
-    var title = this.strings.getString("areYouSure");
-    var promptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].
-                        getService(Ci.nsIPromptService);
-    var confirmed = promptService.confirm(null, title, message);
-    if (!confirmed)
-      return;
-
+    var tabsToClose = [];
     var tabCount = gBrowser.mTabs.length;
     for (var i = tabCount - 1; i >= 0; i--) {
       var tab = gBrowser.mTabs[i];
@@ -94,8 +85,20 @@ var tabcloser = {
         continue;
       }
       if (host == tabHost) {
-        gBrowser.removeTab(tab);
+        tabsToClose.push(tab);
       }
+    }
+    
+    // prompt?
+    var message = this.strings.getFormattedString("areYouSure.message",
+                                                [tabsToClose.length, host]);
+    var title = this.strings.getString("areYouSure");
+    var promptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].
+                        getService(Ci.nsIPromptService);
+    if (promptService.confirm(null, title, message)) {
+      tabsToClose.forEach(function (el) {
+        gBrowser.removeTab(el);
+      });
     }
   },
 

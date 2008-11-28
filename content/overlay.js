@@ -97,7 +97,13 @@ var tabcloser = {
                         getService(Ci.nsIPromptService);
     if (promptService.confirm(null, title, message)) {
       tabsToClose.forEach(function (el) {
-        gBrowser.removeTab(el);
+        // work around some strange bug in 3.0.x that causes removeTab to fail
+        // silently when closing the last tab this way. This isn't needed on
+        // trunk...
+        if (gBrowser.mTabs.length == 1)
+          closeWindow(true);
+        else
+          gBrowser.removeTab(t);
       });
     }
   },

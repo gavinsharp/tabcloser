@@ -96,7 +96,7 @@ var tabcloser = {
     var promptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].
                         getService(Ci.nsIPromptService);
     if (promptService.confirm(null, title, message)) {
-      tabsToClose.forEach(function (el) {
+      tabsToClose.forEach(function (t) {
         // work around some strange bug in 3.0.x that causes removeTab to fail
         // silently when closing the last tab this way. This isn't needed on
         // trunk...

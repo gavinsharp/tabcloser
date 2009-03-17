@@ -88,14 +88,15 @@ var tabcloser = {
         tabsToClose.push(tab);
       }
     }
-    
-    // prompt?
+
     var message = this.strings.getFormattedString("areYouSure.message",
-                                                [tabsToClose.length, host]);
+                                                  [tabsToClose.length, host]);
     var title = this.strings.getString("areYouSure");
     var promptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].
                         getService(Ci.nsIPromptService);
-    if (promptService.confirm(null, title, message)) {
+    
+    // don't prompt if there's only one tab
+    if (tabsToClose.length == 1 || promptService.confirm(window, title, message)) {
       tabsToClose.forEach(function (t) {
         // work around some strange bug in 3.0.x that causes removeTab to fail
         // silently when closing the last tab this way. This isn't needed on

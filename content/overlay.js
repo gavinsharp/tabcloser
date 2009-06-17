@@ -52,6 +52,8 @@ var tabcloser = {
                            this.strings.getString("closeTabsForSite.accesskey"));
     newButton.setAttribute("oncommand", "tabcloser.onMenuItemCommand(event);");
     this.contextMenuItem = this.tabMenu.insertBefore(newButton, closeTabMenuitem);
+    
+    Components.utils.import("resource://gre/modules/PluralForm.jsm");
   },
 
   onMenuShowing: function (e) {
@@ -65,32 +67,22 @@ var tabcloser = {
     }
 
     this.contextMenuItem.hidden = false;
+    var tabCount = this.getTabsToClose(host).length;
     var label = this.strings.getFormattedString("closeTabsForSite.label",
                                                 [host]);
+    label = PluralForm.get(tabCount, label).replace("#1", tabCount);
     this.contextMenuItem.setAttribute("label", label);
   },
 
   onMenuItemCommand: function(e) {
     var host = gBrowser.mContextTab.linkedBrowser.currentURI.host;
-
-    var tabsToClose = [];
-    var tabCount = gBrowser.mTabs.length;
-    for (var i = tabCount - 1; i >= 0; i--) {
-      var tab = gBrowser.mTabs[i];
-      var browser = gBrowser.getBrowserForTab(tab);
-      try {
-        var tabHost = browser.currentURI.host;
-      } catch (ex) {
-        // Ignore failure to get .host
-        continue;
-      }
-      if (host == tabHost) {
-        tabsToClose.push(tab);
-      }
-    }
+    var tabsToClose = this.getTabsToClose(host);
 
     var message = this.strings.getFormattedString("areYouSure.message",
-                                                  [tabsToClose.length, host]);
+                                                  [host]);
+    message = PluralForm.get(tabsToClose.length, message)
+                        .replace("#1", tabsToClose.length);
+    
     var title = this.strings.getString("areYouSure");
     var promptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].
                         getService(Ci.nsIPromptService);
@@ -108,6 +100,26 @@ var tabcloser = {
       });
     }
   },
+
+  getTabsToClose : function(host) {
+    var tabsToClose = [];
+    var tabCount = gBrowser.mTabs.length;
+    for (var i = tabCount - 1; i >= 0; i--) {
+      var tab = gBrowser.mTabs[i];
+      var browser = gBrowser.getBrowserForTab(tab);
+      try {
+        var tabHost = browser.currentURI.host;
+      } catch (ex) {
+        // Ignore failure to get .host
+        continue;
+      }
+      if (host == tabHost) {
+        tabsToClose.push(tab);
+      }
+    }
+    
+    return tabsToClose;
+  }
 
 };
 window.addEventListener("load", function(e) { tabcloser.onLoad(e); }, false);

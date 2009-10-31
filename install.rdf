@@ -4,14 +4,15 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>tabcloser@gavinsharp.com</em:id>
     <em:name>TabCloser</em:name>
-    <em:version>1.05</em:version>
+    <em:version>1.06</em:version>
     <em:creator>Gavin Sharp</em:creator>
+    <em:contributor>Johnathan Nightingale</em:contributor>
     <em:description>Close all tabs for a given site.</em:description>
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- firefox -->
         <em:minVersion>3.0</em:minVersion>
-        <em:maxVersion>3.6a1pre</em:maxVersion>
+        <em:maxVersion>3.7a1pre</em:maxVersion>
       </Description>
     </em:targetApplication>
   </Description>

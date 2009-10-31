@@ -78,27 +78,44 @@ var tabcloser = {
     var host = gBrowser.mContextTab.linkedBrowser.currentURI.host;
     var tabsToClose = this.getTabsToClose(host);
 
-    var message = this.strings.getFormattedString("areYouSure.message",
-                                                  [host]);
-    message = PluralForm.get(tabsToClose.length, message)
-                        .replace("#1", tabsToClose.length);
-    
-    var title = this.strings.getString("areYouSure");
-    var promptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].
-                        getService(Ci.nsIPromptService);
-    
-    // don't prompt if there's only one tab
-    if (tabsToClose.length == 1 || promptService.confirm(window, title, message)) {
-      tabsToClose.forEach(function (t) {
-        // work around some strange bug in 3.0.x that causes removeTab to fail
-        // silently when closing the last tab this way. This isn't needed on
-        // trunk...
-        if (gBrowser.mTabs.length == 1)
-          closeWindow(true);
-        else
-          gBrowser.removeTab(t);
-      });
+    var shouldConfirm = true;
+    try {
+      shouldConfirm = gPrefService.getBoolPref("tabcloser.confirm");
+    } catch (ex) {}
+
+    // only prompt if there's more than one tab
+    if (shouldConfirm && tabsToClose.length > 1) {
+      var promptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].
+                          getService(Ci.nsIPromptService);
+      var message = this.strings.getFormattedString("areYouSure.message",
+                                                    [host]);
+      message = PluralForm.get(tabsToClose.length, message)
+                          .replace("#1", tabsToClose.length);
+      
+      var title = this.strings.getString("areYouSure");
+      var dontPromptTitle = this.strings.getString("areYouSure.dontAskAgain");
+      var dontPrompt = {};
+
+      var doIt = 0 == promptService.confirmEx(window, title, message, 0, null, null, null, dontPromptTitle, dontPrompt);
+
+      // Only save the "don't ask" pref if the user didn't cancel
+      if (doIt && dontPrompt.value)
+        gPrefService.setBoolPref("tabcloser.confirm", false);
+
+      if (!doIt)
+        return;
     }
+
+    // Close the tabs
+    tabsToClose.forEach(function (t) {
+      // work around some strange bug in 3.0.x that causes removeTab to fail
+      // silently when closing the last tab this way. This isn't needed on
+      // trunk...
+      if (gBrowser.mTabs.length == 1)
+        closeWindow(true);
+      else
+        gBrowser.removeTab(t);
+    });
   },
 
   getTabsToClose : function(host) {

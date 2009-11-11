@@ -1,0 +1,1 @@
+pref("tabcloser.confirm", true);

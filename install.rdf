@@ -8,6 +8,7 @@
     <em:creator>Gavin Sharp</em:creator>
     <em:contributor>Johnathan Nightingale</em:contributor>
     <em:description>Close all tabs for a given site.</em:description>
+    <em:optionsURL>chrome://tabcloser/content/prefs.xul</em:optionsURL>
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- firefox -->

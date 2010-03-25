@@ -40,7 +40,8 @@ var tabcloser = {
     this.initialized = true;
     this.strings = document.getElementById("tabcloser-strings");
 
-    this.tabMenu = document.getAnonymousElementByAttribute(getBrowser(), "anonid", "tabContextMenu");
+    this.tabMenu = getBrowser().tabContextMenu ||
+                   document.getAnonymousElementByAttribute(getBrowser(), "anonid", "tabContextMenu");
     var self = this;
     this.tabMenu.addEventListener("popupshowing", function() { self.onMenuShowing(); }, false);
 

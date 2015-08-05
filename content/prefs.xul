@@ -8,7 +8,9 @@
   <prefpane flex="1">
     <preferences>
       <preference id="tabcloser.confirm" name="tabcloser.confirm" type="bool"/>
+      <preference id="tabcloser.closePinned" name="tabcloser.closePinned" type="bool"/>
     </preferences>
     <checkbox label="&prefs.prompt.checkbox;" preference="tabcloser.confirm" />
+    <checkbox label="&prefs.closePinned.checkbox;" preference="tabcloser.closePinned" />
   </prefpane>
 </prefwindow>

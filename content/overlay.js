@@ -122,8 +122,12 @@ var tabcloser = {
   getTabsToClose : function(host) {
     var tabsToClose = [];
     var tabCount = gBrowser.mTabs.length;
+    var closePinned = gPrefService.getBoolPref("tabcloser.closePinned");
     for (var i = tabCount - 1; i >= 0; i--) {
       var tab = gBrowser.mTabs[i];
+      if (!closePinned && tab.pinned) {
+        continue;
+      }
       var browser = gBrowser.getBrowserForTab(tab);
       try {
         var tabHost = browser.currentURI.host;

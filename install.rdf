@@ -4,16 +4,17 @@
   <Description about="urn:mozilla:install-manifest">
     <em:id>tabcloser@gavinsharp.com</em:id>
     <em:name>TabCloser</em:name>
-    <em:version>1.07</em:version>
+    <em:version>1.08</em:version>
     <em:creator>Gavin Sharp</em:creator>
     <em:contributor>Johnathan Nightingale</em:contributor>
+    <em:contributor>Bob Owen</em:contributor>
     <em:description>Close all tabs for a given site.</em:description>
     <em:optionsURL>chrome://tabcloser/content/prefs.xul</em:optionsURL>
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- firefox -->
         <em:minVersion>3.0</em:minVersion>
-        <em:maxVersion>3.7a1pre</em:maxVersion>
+        <em:maxVersion>42.0a1</em:maxVersion>
       </Description>
     </em:targetApplication>
   </Description>
